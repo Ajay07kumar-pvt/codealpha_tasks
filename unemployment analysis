@@ -1,0 +1,89 @@
+ UNEMPLOYMENT ANALYSIS WITH PYTHON
+# CodeAlpha Internship - Data Science Task 2
+
+# Step 1: Import Libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Step 2: Load Dataset
+# Replace 'unemployment.csv' with your dataset file name if different
+df = pd.read_csv("unemployment.csv")
+
+# Step 3: Explore the Dataset
+print(" First 5 rows of the dataset:")
+print(df.head())
+
+print("\n Dataset Info:")
+print(df.info())
+
+print("\n Summary Statistics:")
+print(df.describe())
+
+# Step 4: Check for Missing Values
+print("\n Missing Values:")
+print(df.isnull().sum())
+
+# Step 5: Rename Columns for Simplicity (if needed)
+df.columns = [col.strip().replace(" ", "_").lower() for col in df.columns]
+print("\n Cleaned Column Names:", df.columns.tolist())
+
+# Step 6: Data Visualization
+plt.figure(figsize=(10,5))
+sns.heatmap(df.isnull(), cbar=False, cmap="coolwarm")
+plt.title("Missing Values Heatmap")
+plt.show()
+
+# Step 7: Unemployment Rate by Region
+plt.figure(figsize=(10,6))
+sns.barplot(x='region', y='estimatedunemploymentrate(%)', data=df)
+plt.xticks(rotation=90)
+plt.title("Unemployment Rate by Region")
+plt.show()
+
+# Step 8: Unemployment Rate over Time
+if 'date' in df.columns:
+    df['date'] = pd.to_datetime(df['date'])
+    df = df.sort_values('date')
+    
+    plt.figure(figsize=(10,5))
+    sns.lineplot(x='date', y='estimatedunemploymentrate(%)', data=df)
+    plt.title("Unemployment Rate Over Time")
+    plt.xlabel("Date")
+    plt.ylabel("Unemployment Rate (%)")
+    plt.show()
+else:
+    print("\n No 'date' column found for time-series plot.")
+
+# Step 9: Unemployment vs. Labour Participation
+if 'estimatedlabourparticipationrate(%)' in df.columns:
+    plt.figure(figsize=(8,6))
+    sns.scatterplot(x='estimatedlabourparticipationrate(%)',
+                    y='estimatedunemploymentrate(%)', data=df, hue='region')
+    plt.title("Unemployment vs Labour Participation Rate")
+    plt.show()
+
+# Step 10: Correlation Heatmap
+plt.figure(figsize=(6,5))
+sns.heatmap(df.corr(numeric_only=True), annot=True, cmap='Blues')
+plt.title("Feature Correlation")
+plt.show()
+
+# Step 11: Region-wise Analysis
+region_avg = df.groupby('region')['estimatedunemploymentrate(%)'].mean().sort_values(ascending=False)
+print("\nAverage Unemployment Rate by Region:")
+print(region_avg)
+
+plt.figure(figsize=(10,5))
+region_avg.plot(kind='bar', color='orange')
+plt.title("Average Unemployment Rate by Region")
+plt.xlabel("Region")
+plt.ylabel("Average Unemployment Rate (%)")
+plt.show()
+
+# Step 12: Summary Insights
+print("\n Key Insights:")
+print("- Highest unemployment observed in:", region_avg.idxmax())
+print("- Lowest unemployment observed in:", region_avg.idxmin())
+print("- Average unemployment across regions: {:.2f}%".format(df['estimatedunemploymentrate(%)'].mean()))
