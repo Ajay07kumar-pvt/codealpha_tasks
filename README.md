@@ -40,13 +40,4 @@ This task demonstrates the basics of *supervised machine learning classification
 - Built a simple yet powerful predictive model  
 - Learned key ML concepts like feature scaling and model evaluation  
 
----
 
-### Files in This Repository
-| File | Description |
-|------|--------------|
-| CodeAlpha_IrisClassification.ipynb | Jupyter Notebook containing full code |
-| README.md | Project documentation |
-
-
-> 🌸 “Even a simple dataset can teach powerful ML concepts.”
